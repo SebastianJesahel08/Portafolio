@@ -1,0 +1,27 @@
+/* Reset base para evitar diferencias entre navegadores */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* Base visual del menu para trabajar esta pagina de forma aislada */
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background:black;
+    color:white;
+}
+
+/* Fondo y color general de la pagina menu.html */
+.menu-page{
+    background:black;
+    color:white;
+}
+
+/* Centra el bloque del menu en toda la pantalla */
+.contenido-menu{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
