@@ -1,6 +1,6 @@
 const intro = document.getElementById("intro");
-const INTRO_DURATION_MS = 3000;
-const FADE_DURATION_MS = 800;
+const INTRO_DURATION_MS = 2600;
+const FADE_DURATION_MS = 380;
 const INTRO_SEEN_KEY = "portfolio-intro-seen";
 
 function getIntroSeen() {
