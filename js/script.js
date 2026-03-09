@@ -7,7 +7,7 @@ if (intro) {
         intro.classList.add("oculto");
 
         setTimeout(() => {
-            window.location.href = "menu.html";
+            window.location.href = "app.html#inicio";
         }, FADE_DURATION_MS);
     }, INTRO_DURATION_MS);
 }

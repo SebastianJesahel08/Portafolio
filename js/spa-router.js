@@ -1,10 +1,30 @@
-const SPA_ROUTES = new Set(["menu.html", "proyectos.html", "experiencia.html", "contacto.html"]);
+const SPA_ROUTES = new Set(["app.html", "index.html", "menu.html", "proyectos.html", "experiencia.html", "contacto.html"]);
+const HASH_TO_ROUTE = {
+    "#inicio": "app.html",
+    "#proyectos": "proyectos.html",
+    "#experiencia": "experiencia.html",
+    "#contacto": "contacto.html"
+};
+const ROUTE_TO_HASH = {
+    "app.html": "#inicio",
+    "index.html": "#inicio",
+    "menu.html": "#inicio",
+    "proyectos.html": "#proyectos",
+    "experiencia.html": "#experiencia",
+    "contacto.html": "#contacto"
+};
+
 let isNavigating = false;
 
 function getRouteName(url) {
     const parsedUrl = new URL(url, window.location.href);
-    const path = parsedUrl.pathname.split("/").pop() || "";
+    const path = parsedUrl.pathname.split("/").pop() || "app.html";
     return path.toLowerCase();
+}
+
+function getRouteFromHash(hash) {
+    const safeHash = String(hash || "").toLowerCase();
+    return HASH_TO_ROUTE[safeHash] || null;
 }
 
 function shouldHandleAsSpa(link) {
@@ -14,12 +34,13 @@ function shouldHandleAsSpa(link) {
 
     const nextUrl = new URL(link.href, window.location.href);
     if (nextUrl.origin !== window.location.origin) return false;
-    if (nextUrl.hash && nextUrl.pathname === window.location.pathname) return false;
 
     return SPA_ROUTES.has(getRouteName(nextUrl.href));
 }
 
 function bootPageFeatures() {
+    const storedTheme = window.getStoredTheme?.() || "dark";
+    window.applyTheme?.(storedTheme);
     window.initTheme?.();
     window.initSkills?.();
     window.initReveal?.();
@@ -27,16 +48,26 @@ function bootPageFeatures() {
     window.initRabbits?.();
 }
 
-async function renderRoute(url, options = { pushState: true, keepScrollY: null }) {
+function setActiveMenuFromRoute(route) {
+    const currentLinks = document.querySelectorAll(".menu-links a");
+    currentLinks.forEach((link) => {
+        const linkRoute = getRouteName(link.href);
+        link.classList.toggle("is-active", linkRoute === route);
+    });
+}
+
+async function renderRoute(route, options = { updateHistory: true, keepScrollY: null }) {
+    if (route === "menu.html" || route === "index.html") route = "app.html";
     if (isNavigating) return;
+    if (!SPA_ROUTES.has(route)) return;
     isNavigating = true;
 
     const keepScrollY = options.keepScrollY ?? window.scrollY;
 
     try {
-        const response = await fetch(url, { headers: { "X-Requested-With": "spa-router" } });
+        const response = await fetch(route, { cache: "no-store" });
         if (!response.ok) {
-            window.location.href = url;
+            window.location.href = route;
             return;
         }
 
@@ -47,32 +78,56 @@ async function renderRoute(url, options = { pushState: true, keepScrollY: null }
         const currentMain = document.querySelector("main.contenido-menu");
 
         if (!nextMain || !currentMain) {
-            window.location.href = url;
+            window.location.href = route;
             return;
         }
 
-        const baseBodyClasses = Array.from(nextDocument.body.classList).filter(
+        const bodyClasses = Array.from(nextDocument.body.classList).filter(
             (cssClass) => cssClass !== "light-mode" && cssClass !== "dark-mode"
         );
+        const currentThemeClass = document.body.classList.contains("light-mode") ? "light-mode" : "dark-mode";
 
-        document.body.className = baseBodyClasses.join(" ");
+        document.body.className = `${bodyClasses.join(" ")} ${currentThemeClass}`.trim();
         currentMain.replaceWith(nextMain);
         document.title = nextDocument.title;
+        setActiveMenuFromRoute(route);
+        bootPageFeatures();
 
-        if (options.pushState) {
-            history.pushState({ spa: true }, "", url);
+        const panelContent = document.querySelector(".panel-content");
+        if (!panelContent || !panelContent.textContent.trim()) {
+            window.location.href = route;
+            return;
         }
 
-        bootPageFeatures();
+        if (options.updateHistory) {
+            const nextHash = ROUTE_TO_HASH[route] || "#inicio";
+            const nextUrl = `${window.location.pathname}${window.location.search}${nextHash}`;
+            history.pushState({ spa: true, route }, "", nextUrl);
+        }
 
         requestAnimationFrame(() => {
             window.scrollTo(0, keepScrollY);
         });
     } catch {
-        window.location.href = url;
+        window.location.href = route;
     } finally {
         isNavigating = false;
     }
+}
+
+function getRouteFromCurrentUrl() {
+    return getRouteFromHash(window.location.hash) || getRouteName(window.location.href) || "app.html";
+}
+
+function ensureCanonicalHash() {
+    const route = getRouteFromCurrentUrl();
+    if (!SPA_ROUTES.has(route)) return;
+
+    const targetHash = ROUTE_TO_HASH[route] || "#inicio";
+    if (window.location.hash.toLowerCase() === targetHash) return;
+
+    const nextUrl = `${window.location.pathname}${window.location.search}${targetHash}`;
+    history.replaceState({ spa: true, route }, "", nextUrl);
 }
 
 document.addEventListener("click", (event) => {
@@ -84,12 +139,22 @@ document.addEventListener("click", (event) => {
     if (!shouldHandleAsSpa(link)) return;
 
     event.preventDefault();
-    renderRoute(link.href, { pushState: true, keepScrollY: window.scrollY });
+    const route = getRouteName(link.href);
+    renderRoute(route, { updateHistory: true, keepScrollY: window.scrollY });
 });
 
 window.addEventListener("popstate", () => {
-    const routeName = getRouteName(window.location.href);
-    if (!SPA_ROUTES.has(routeName)) return;
+    const route = getRouteFromCurrentUrl();
+    if (!SPA_ROUTES.has(route)) return;
 
-    renderRoute(window.location.href, { pushState: false, keepScrollY: window.scrollY });
+    renderRoute(route, { updateHistory: false, keepScrollY: window.scrollY });
 });
+
+window.addEventListener("hashchange", () => {
+    const route = getRouteFromCurrentUrl();
+    if (!SPA_ROUTES.has(route)) return;
+
+    renderRoute(route, { updateHistory: false, keepScrollY: window.scrollY });
+});
+
+ensureCanonicalHash();
