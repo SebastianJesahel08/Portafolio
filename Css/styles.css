@@ -1,109 +1,115 @@
-/* Reset base para evitar diferencias entre navegadores */
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Estilo global por defecto del proyecto */
-body{
+:root {
+    --bg: #000000;
+    --bg-soft: #090909;
+    --text: #ffffff;
+    --text-soft: #c8c8c8;
+    --line: #2a2a2a;
+}
+
+body.light-mode {
+    --bg: #ffffff;
+    --bg-soft: #f7f7f7;
+    --text: #0b0b0b;
+    --text-soft: #424242;
+    --line: #d4d4d4;
+}
+
+body {
+    min-height: 100vh;
     font-family: Arial, Helvetica, sans-serif;
-    background:black;
-    color:white;
+    color: var(--text);
+    background:
+        radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.07), transparent 35%),
+        linear-gradient(160deg, var(--bg-soft), var(--bg) 45%);
 }
 
-/* Bloque del intro que cubre toda la pantalla al cargar */
-.nombre{
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:100vh;
-    padding:0 20px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:black;
-    z-index:2;
-    transition:opacity .8s ease, visibility .8s ease;
+.nombre {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100vh;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:
+        radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.07), transparent 35%),
+        linear-gradient(160deg, var(--bg-soft), var(--bg) 45%);
+    z-index: 2;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
 }
 
-/* Nombre principal con fuente fina tipo portfolio minimalista */
-.nombre h1{
-    font-size:clamp(32px, 6vw, 40px);
-    text-align:center;
+.nombre h1 {
+    font-size: clamp(32px, 6vw, 40px);
+    text-align: center;
     font-family: "Poppins", sans-serif;
-    font-weight:300;
-    letter-spacing:0.3px;
-    line-height:1.15;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+    line-height: 1.15;
 }
 
-/* Agrupa nombre + linea + subtitulo y aplica animacion de entrada */
-.titulo-intro{
-    display:inline-flex;
-    flex-direction:column;
-    align-items:stretch;
-    gap:10px;
-    opacity:0;
+.titulo-intro {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    opacity: 0;
     animation: aparecer 1.2s forwards;
 }
 
-/* Linea separadora del mismo ancho que el bloque del titulo */
-.linea-intro{
-    width:100%;
-    height:2px;
-    background:#ffffff;
+.linea-intro {
+    width: 100%;
+    height: 1px;
+    background: var(--line);
 }
 
-/* Subtitulo en gris claro para diferenciarlo del nombre */
-.subtitulo-intro{
-    color:#c8c8c8;
-    font-size:clamp(16px, 3.5vw, 20px);
-    letter-spacing:clamp(2px, 0.5vw, 3px);
-    text-transform:uppercase;
-    text-align:center;
+.subtitulo-intro {
+    color: var(--text-soft);
+    font-size: clamp(16px, 3.5vw, 20px);
+    letter-spacing: clamp(2px, 0.5vw, 3px);
+    text-transform: uppercase;
+    text-align: center;
     font-family: "Times New Roman", Georgia, serif;
 }
 
-/* Estado oculto del intro antes de redirigir al menu */
-.nombre.oculto{
-    opacity:0;
-    visibility:hidden;
+.nombre.oculto {
+    opacity: 0;
+    visibility: hidden;
 }
 
-/* Animacion suave de aparicion inicial del bloque intro */
-@keyframes aparecer{
-    from{
-        opacity:0;
-        transform:translateY(20px);
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
     }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-/* Ajustes para tablet y pantallas medianas */
-@media (max-width: 768px){
-    .titulo-intro{
-        gap:8px;
-    }
-
-    .linea-intro{
-        height:1px;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-/* Ajustes para moviles pequenos */
-@media (max-width: 480px){
-    .nombre{
-        padding:0 14px;
+@media (max-width: 768px) {
+    .titulo-intro {
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nombre {
+        padding: 0 14px;
     }
 
-    .nombre h1{
-        letter-spacing:0.2px;
+    .nombre h1 {
+        letter-spacing: 0.2px;
     }
 
-    .subtitulo-intro{
-        letter-spacing:2px;
+    .subtitulo-intro {
+        letter-spacing: 2px;
     }
 }

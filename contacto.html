@@ -12,8 +12,9 @@
         <section class="panel-principal">
             <header class="panel-top">
                 <nav class="menu-links" aria-label="Navegacion principal">
-                    <a href="menu.html#inicio">Inicio</a>
-                    <a href="menu.html#proyectos">Proyectos</a>
+                    <a href="menu.html">Inicio</a>
+                    <a href="proyectos.html">Proyectos</a>
+                    <a href="experiencia.html">Experiencia</a>
                     <a href="contacto.html" class="is-active">Contacto</a>
                 </nav>
 
@@ -26,16 +27,27 @@
             </header>
 
             <div class="panel-content contact-layout">
-                <article class="perfil">
+                <article class="perfil reveal">
                     <h1>Contacto</h1>
                     <p class="rol">Hablemos de tu proyecto</p>
                     <p class="descripcion">
                         Si quieres colaborar, necesitas soporte tecnico o tienes una propuesta laboral,
                         enviame un mensaje por este formulario y te respondo lo antes posible.
                     </p>
+
+                    <div class="contact-points">
+                        <article class="metric-card">
+                            <h3>Respuesta</h3>
+                            <p>Tiempo estimado de respuesta: 24 a 48 horas.</p>
+                        </article>
+                        <article class="metric-card">
+                            <h3>Modalidad</h3>
+                            <p>Disponible para remoto, hibrido y proyectos por objetivos.</p>
+                        </article>
+                    </div>
                 </article>
 
-                <section class="contact-card" aria-labelledby="form-title">
+                <section class="contact-card reveal" aria-labelledby="form-title">
                     <h2 id="form-title">Formulario</h2>
                     <form
                         class="contact-form"
@@ -68,11 +80,13 @@
                 <a href="mailto:jesahel088@gmail.com">jesahel088@gmail.com</a>
                 <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
                 <a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a>
+                <span class="foot-note">Canal principal: correo profesional</span>
             </footer>
         </section>
     </main>
 
     <script src="js/theme.js"></script>
     <script src="js/contacto.js"></script>
+    <script src="js/ui.js"></script>
 </body>
 </html>
