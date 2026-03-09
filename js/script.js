@@ -19,18 +19,12 @@ function setIntroSeen() {
     }
 }
 
-function revealMenuNow() {
-    document.body.classList.add("menu-animate");
-    document.body.classList.remove("menu-preload");
-}
-
 if (intro) {
     const hasHashRoute = Boolean(window.location.hash);
     const introSeenInSession = getIntroSeen();
 
     if (hasHashRoute || introSeenInSession) {
         intro.remove();
-        revealMenuNow();
         return;
     }
 
@@ -45,7 +39,6 @@ if (intro) {
             }
 
             intro.remove();
-            revealMenuNow();
             setIntroSeen();
 
             if (!window.location.hash) {

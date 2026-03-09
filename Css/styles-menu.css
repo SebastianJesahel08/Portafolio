@@ -119,17 +119,6 @@ body::before {
     }
 }
 
-.menu-page.menu-preload .panel-principal {
-    opacity: 0;
-    transform: translateY(8px);
-}
-
-.menu-page.menu-animate .panel-principal {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.22s ease-out, transform 0.22s ease-out;
-}
-
 .contenido-menu {
     width: min(1200px, calc(100% - 30px));
     margin: 0 auto;
