@@ -28,6 +28,11 @@ if (intro) {
         return;
     }
 
+    // Safety fallback: never keep intro mounted longer than 5s.
+    setTimeout(() => {
+        if (document.body.contains(intro)) intro.remove();
+    }, 5000);
+
     setTimeout(() => {
         intro.classList.add("oculto");
 
