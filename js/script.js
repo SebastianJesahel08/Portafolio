@@ -3,6 +3,22 @@ const INTRO_DURATION_MS = 3000;
 const FADE_DURATION_MS = 800;
 const INTRO_SEEN_KEY = "portfolio-intro-seen";
 
+function getIntroSeen() {
+    try {
+        return sessionStorage.getItem(INTRO_SEEN_KEY) === "1";
+    } catch {
+        return false;
+    }
+}
+
+function setIntroSeen() {
+    try {
+        sessionStorage.setItem(INTRO_SEEN_KEY, "1");
+    } catch {
+        // Ignore storage errors in restricted browsers.
+    }
+}
+
 function revealMenuNow() {
     document.body.classList.add("menu-animate");
     document.body.classList.remove("menu-preload");
@@ -10,7 +26,7 @@ function revealMenuNow() {
 
 if (intro) {
     const hasHashRoute = Boolean(window.location.hash);
-    const introSeenInSession = sessionStorage.getItem(INTRO_SEEN_KEY) === "1";
+    const introSeenInSession = getIntroSeen();
 
     if (hasHashRoute || introSeenInSession) {
         intro.remove();
@@ -30,7 +46,7 @@ if (intro) {
 
             intro.remove();
             revealMenuNow();
-            sessionStorage.setItem(INTRO_SEEN_KEY, "1");
+            setIntroSeen();
 
             if (!window.location.hash) {
                 history.replaceState(history.state, "", `${window.location.pathname}${window.location.search}#inicio`);
