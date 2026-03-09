@@ -14,6 +14,11 @@
     --accent: #ffffff;
     --accent-strong: #e6e6e6;
     --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    --rabbit-main: #f2f2f2;
+    --rabbit-shade: #d8d8d8;
+    --rabbit-ear: #f4c8d8;
+    --rabbit-nose: #ff8ab4;
+    --rabbit-outline: #0f0f10;
 }
 
 .menu-page.light-mode {
@@ -26,6 +31,11 @@
     --accent: #000000;
     --accent-strong: #1e1e1e;
     --shadow: 0 18px 40px rgba(0, 0, 0, 0.09);
+    --rabbit-main: #bcbec6;
+    --rabbit-shade: #989ca8;
+    --rabbit-ear: #dcc4d2;
+    --rabbit-nose: #da6d98;
+    --rabbit-outline: #141418;
 }
 
 body {
@@ -38,6 +48,10 @@ body {
         linear-gradient(160deg, var(--bg-soft), var(--bg) 52%);
     transition: background 0.35s ease, color 0.35s ease;
     overflow-x: hidden;
+}
+
+body::before {
+    content: none;
 }
 
 .contenido-menu {
@@ -94,6 +108,15 @@ body {
     font-weight: 700;
 }
 
+.menu-links a:focus-visible,
+.panel-footer a:focus-visible,
+.btn-submit:focus-visible,
+.contact-form input:focus-visible,
+.contact-form textarea:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--accent) 60%, var(--line));
+    outline-offset: 2px;
+}
+
 .theme-toggle {
     cursor: pointer;
 }
@@ -139,6 +162,8 @@ body {
     gap: 38px;
     padding: 26px 0;
     align-content: start;
+    position: relative;
+    z-index: 1;
 }
 
 .perfil h1 {
@@ -262,6 +287,59 @@ body {
     flex-wrap: wrap;
 }
 
+.rabbit-lane {
+    position: relative;
+    height: 68px;
+    margin-top: 8px;
+    border-bottom: 1px solid var(--line);
+    overflow: visible;
+    z-index: 3;
+}
+
+.rabbit-lane::after {
+    content: "";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    border-top: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+    transform: translateY(-50%) rotate(45deg);
+    opacity: 0.75;
+}
+
+.pixel-rabbit {
+    position: absolute;
+    left: 6px;
+    bottom: 1px;
+    width: 52px;
+    height: 46px;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    transform-origin: center bottom;
+    z-index: 4;
+}
+
+.rabbit-sprite {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/walk1.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center bottom;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    position: relative;
+}
+
+.menu-page.light-mode .rabbit-sprite {
+    filter: grayscale(0.55) brightness(0.92);
+}
+
 .panel-footer a {
     text-decoration: none;
     color: var(--text-soft);
@@ -347,10 +425,23 @@ body {
     color: var(--bg);
 }
 
+.btn-submit:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
 .form-feedback {
     min-height: 20px;
     font-size: 0.92rem;
     color: var(--text-soft);
+}
+
+.form-feedback.is-success {
+    color: color-mix(in srgb, #66d48f 72%, var(--text) 28%);
+}
+
+.form-feedback.is-error {
+    color: color-mix(in srgb, #ff7d7d 72%, var(--text) 28%);
 }
 
 .projects-layout {
@@ -479,6 +570,16 @@ body {
     font-size: 0.95rem;
 }
 
+.simple-list {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 6px;
+    color: var(--text-soft);
+    font-size: 0.94rem;
+    line-height: 1.45;
+}
+
 .reveal {
     opacity: 0;
     transform: translateY(12px);
@@ -488,6 +589,37 @@ body {
 .reveal.in-view {
     opacity: 1;
     transform: translateY(0);
+}
+
+.toast {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    max-width: min(360px, calc(100% - 24px));
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: var(--text);
+    background: color-mix(in srgb, var(--card) 82%, var(--text) 18%);
+    box-shadow: var(--shadow);
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 4;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast.success {
+    border-color: color-mix(in srgb, #66d48f 45%, var(--line));
+}
+
+.toast.error {
+    border-color: color-mix(in srgb, #ff7d7d 45%, var(--line));
 }
 
 @media (max-width: 960px) {
@@ -529,3 +661,5 @@ body {
         flex-direction: column;
     }
 }
+
+
