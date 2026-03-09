@@ -17,10 +17,21 @@ function getStoredTheme() {
     return localStorage.getItem(THEME_STORAGE_KEY) || "dark";
 }
 
-applyTheme(getStoredTheme());
+function initTheme() {
+    applyTheme(getStoredTheme());
 
-document.getElementById("theme-toggle")?.addEventListener("change", (event) => {
-    const theme = event.target.checked ? "light" : "dark";
-    applyTheme(theme);
-    saveTheme(theme);
-});
+    const toggle = document.getElementById("theme-toggle");
+    if (!toggle) return;
+
+    toggle.onchange = (event) => {
+        const theme = event.target.checked ? "light" : "dark";
+        applyTheme(theme);
+        saveTheme(theme);
+    };
+}
+
+window.initTheme = initTheme;
+window.applyTheme = applyTheme;
+window.getStoredTheme = getStoredTheme;
+
+initTheme();

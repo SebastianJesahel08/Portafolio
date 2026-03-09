@@ -1,5 +1,3 @@
-const skillItems = document.querySelectorAll(".skill-item");
-
 function clampPercent(value) {
     const number = Number(value);
     if (Number.isNaN(number)) return 0;
@@ -16,9 +14,15 @@ function setSkillLevel(item, percentage) {
     item.dataset.level = String(safeValue);
 }
 
-skillItems.forEach((item) => {
-    const level = item.dataset.level ?? "0";
-    setSkillLevel(item, level);
-});
+function initSkills(root = document) {
+    const skillItems = root.querySelectorAll(".skill-item");
+    skillItems.forEach((item) => {
+        const level = item.dataset.level ?? "0";
+        setSkillLevel(item, level);
+    });
+}
 
 window.setSkillLevel = setSkillLevel;
+window.initSkills = initSkills;
+
+initSkills();

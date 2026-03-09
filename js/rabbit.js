@@ -1,8 +1,8 @@
-const rabbitLanes = document.querySelectorAll("[data-rabbit-lane]");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const WALK_IMAGES = ["img/walk1.png", "img/probe5.png"];
 const JUMP_IMAGE = "img/probe5.png";
 const WALK_FRAME_TIME = 0.14;
+let rabbitController = null;
 
 function initRabbit(lane) {
     const rabbit = lane.querySelector(".pixel-rabbit");
@@ -32,12 +32,11 @@ function initRabbit(lane) {
         state.jumpVelocity = -230;
     }
 
-    rabbit.addEventListener("click", jump);
+    rabbit.onclick = jump;
     updateBounds();
+
     return { rabbit, sprite, state, updateBounds };
 }
-
-const rabbits = Array.from(rabbitLanes).map(initRabbit).filter(Boolean);
 
 function renderRabbit(entity) {
     const { rabbit, sprite, state } = entity;
@@ -46,7 +45,21 @@ function renderRabbit(entity) {
     rabbit.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scaleX(${state.dir})`;
 }
 
-if (rabbits.length > 0) {
+function stopRabbitAnimation() {
+    if (!rabbitController) return;
+
+    if (rabbitController.rafId) cancelAnimationFrame(rabbitController.rafId);
+    window.removeEventListener("resize", rabbitController.onResize);
+    rabbitController = null;
+}
+
+function initRabbits(root = document) {
+    stopRabbitAnimation();
+
+    const rabbitLanes = root.querySelectorAll("[data-rabbit-lane]");
+    const rabbits = Array.from(rabbitLanes).map(initRabbit).filter(Boolean);
+    if (rabbits.length === 0) return;
+
     let lastTime = performance.now();
 
     function animate(now) {
@@ -90,9 +103,16 @@ if (rabbits.length > 0) {
             renderRabbit(entity);
         });
 
-        requestAnimationFrame(animate);
+        rabbitController.rafId = requestAnimationFrame(animate);
     }
 
-    requestAnimationFrame(animate);
-    window.addEventListener("resize", () => rabbits.forEach((rabbit) => rabbit.updateBounds()));
+    const onResize = () => rabbits.forEach((rabbit) => rabbit.updateBounds());
+    rabbitController = { rafId: 0, onResize };
+    rabbitController.rafId = requestAnimationFrame(animate);
+    window.addEventListener("resize", onResize);
 }
+
+window.initRabbits = initRabbits;
+window.stopRabbitAnimation = stopRabbitAnimation;
+
+initRabbits();

@@ -1,17 +1,11 @@
-const contactForm = document.getElementById("contact-form");
-const feedback = document.getElementById("form-feedback");
-const submitButton = contactForm?.querySelector('button[type="submit"]');
-const toast = document.getElementById("toast");
 const FORMSPREE_PREFIX = "https://formspree.io/f/";
 const DEFAULT_SUBMIT_LABEL = "Enviar mensaje";
-let isSending = false;
-let toastTimeoutId = null;
 
 function isValidEmail(value) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-function setFeedback(message, type = "") {
+function setFeedback(feedback, message, type = "") {
     feedback.textContent = message;
     feedback.classList.remove("is-success", "is-error");
 
@@ -19,7 +13,7 @@ function setFeedback(message, type = "") {
     if (type === "error") feedback.classList.add("is-error");
 }
 
-function showToast(message, type = "") {
+function showToast(toast, state, message, type = "") {
     if (!toast) return;
 
     toast.textContent = message;
@@ -29,24 +23,32 @@ function showToast(message, type = "") {
 
     toast.classList.add("show");
 
-    if (toastTimeoutId) clearTimeout(toastTimeoutId);
-    toastTimeoutId = setTimeout(() => {
+    if (state.toastTimeoutId) clearTimeout(state.toastTimeoutId);
+    state.toastTimeoutId = setTimeout(() => {
         toast.classList.remove("show");
     }, 3200);
 }
 
-function setSubmittingState(submitting) {
-    isSending = submitting;
+function setSubmittingState(submitButton, state, submitting) {
+    state.isSending = submitting;
     if (!submitButton) return;
 
     submitButton.disabled = submitting;
     submitButton.textContent = submitting ? "Enviando..." : DEFAULT_SUBMIT_LABEL;
 }
 
-if (contactForm && feedback) {
+function initContactForm(root = document) {
+    const contactForm = root.getElementById("contact-form");
+    const feedback = root.getElementById("form-feedback");
+    const submitButton = contactForm?.querySelector('button[type="submit"]');
+    const toast = root.getElementById("toast");
+    const state = { isSending: false, toastTimeoutId: null };
+
+    if (!contactForm || !feedback) return;
+
     contactForm.addEventListener("submit", async (event) => {
         event.preventDefault();
-        if (isSending) return;
+        if (state.isSending) return;
 
         const data = new FormData(contactForm);
         const nombre = String(data.get("nombre") || "").trim();
@@ -56,22 +58,22 @@ if (contactForm && feedback) {
         const formAction = contactForm.getAttribute("action") || "";
 
         if (!nombre || !email || !asunto || !mensaje) {
-            setFeedback("Completa todos los campos antes de enviar.", "error");
+            setFeedback(feedback, "Completa todos los campos antes de enviar.", "error");
             return;
         }
 
         if (!isValidEmail(email)) {
-            setFeedback("Ingresa un correo valido.", "error");
+            setFeedback(feedback, "Ingresa un correo valido.", "error");
             return;
         }
 
         if (!formAction || !formAction.startsWith(FORMSPREE_PREFIX)) {
-            setFeedback("Formulario no configurado. Revisa el endpoint de Formspree.", "error");
+            setFeedback(feedback, "Formulario no configurado. Revisa el endpoint de Formspree.", "error");
             return;
         }
 
-        setSubmittingState(true);
-        setFeedback("Enviando mensaje...");
+        setSubmittingState(submitButton, state, true);
+        setFeedback(feedback, "Enviando mensaje...");
 
         try {
             const response = await fetch(formAction, {
@@ -84,21 +86,25 @@ if (contactForm && feedback) {
 
             if (response.ok) {
                 const successMessage = "Mensaje enviado. Gracias por contactarme.";
-                setFeedback(successMessage, "success");
-                showToast(successMessage, "success");
+                setFeedback(feedback, successMessage, "success");
+                showToast(toast, state, successMessage, "success");
                 contactForm.reset();
                 return;
             }
 
             const failMessage = "No se pudo enviar. Intenta nuevamente en unos minutos.";
-            setFeedback(failMessage, "error");
-            showToast(failMessage, "error");
+            setFeedback(feedback, failMessage, "error");
+            showToast(toast, state, failMessage, "error");
         } catch {
             const errorMessage = "Error de red. Verifica tu conexion e intenta otra vez.";
-            setFeedback(errorMessage, "error");
-            showToast(errorMessage, "error");
+            setFeedback(feedback, errorMessage, "error");
+            showToast(toast, state, errorMessage, "error");
         } finally {
-            setSubmittingState(false);
+            setSubmittingState(submitButton, state, false);
         }
     });
 }
+
+window.initContactForm = initContactForm;
+
+initContactForm();

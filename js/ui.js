@@ -1,17 +1,29 @@
-const revealElements = document.querySelectorAll(".reveal");
+let revealObserver = null;
 
-if (revealElements.length > 0) {
-    const observer = new IntersectionObserver(
+function initReveal(root = document) {
+    if (revealObserver) {
+        revealObserver.disconnect();
+        revealObserver = null;
+    }
+
+    const revealElements = root.querySelectorAll(".reveal");
+    if (revealElements.length === 0) return;
+
+    revealObserver = new IntersectionObserver(
         (entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add("in-view");
-                    observer.unobserve(entry.target);
+                    revealObserver.unobserve(entry.target);
                 }
             });
         },
         { threshold: 0.18 }
     );
 
-    revealElements.forEach((element) => observer.observe(element));
+    revealElements.forEach((element) => revealObserver.observe(element));
 }
+
+window.initReveal = initReveal;
+
+initReveal();
