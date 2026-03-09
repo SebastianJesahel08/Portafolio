@@ -1,13 +1,13 @@
-const SPA_ROUTES = new Set(["app.html", "index.html", "menu.html", "proyectos.html", "experiencia.html", "contacto.html"]);
+const SPA_ROUTES = new Set(["index.html", "app.html", "menu.html", "proyectos.html", "experiencia.html", "contacto.html"]);
 const HASH_TO_ROUTE = {
-    "#inicio": "app.html",
+    "#inicio": "index.html",
     "#proyectos": "proyectos.html",
     "#experiencia": "experiencia.html",
     "#contacto": "contacto.html"
 };
 const ROUTE_TO_HASH = {
-    "app.html": "#inicio",
     "index.html": "#inicio",
+    "app.html": "#inicio",
     "menu.html": "#inicio",
     "proyectos.html": "#proyectos",
     "experiencia.html": "#experiencia",
@@ -18,7 +18,7 @@ let isNavigating = false;
 
 function getRouteName(url) {
     const parsedUrl = new URL(url, window.location.href);
-    const path = parsedUrl.pathname.split("/").pop() || "app.html";
+    const path = parsedUrl.pathname.split("/").pop() || "index.html";
     return path.toLowerCase();
 }
 
@@ -57,7 +57,7 @@ function setActiveMenuFromRoute(route) {
 }
 
 async function renderRoute(route, options = { updateHistory: true, keepScrollY: null }) {
-    if (route === "menu.html" || route === "index.html") route = "app.html";
+    if (route === "menu.html" || route === "app.html") route = "index.html";
     if (isNavigating) return;
     if (!SPA_ROUTES.has(route)) return;
     isNavigating = true;
@@ -83,7 +83,11 @@ async function renderRoute(route, options = { updateHistory: true, keepScrollY: 
         }
 
         const bodyClasses = Array.from(nextDocument.body.classList).filter(
-            (cssClass) => cssClass !== "light-mode" && cssClass !== "dark-mode"
+            (cssClass) =>
+                cssClass !== "light-mode" &&
+                cssClass !== "dark-mode" &&
+                cssClass !== "menu-preload" &&
+                cssClass !== "menu-animate"
         );
         const currentThemeClass = document.body.classList.contains("light-mode") ? "light-mode" : "dark-mode";
 
@@ -116,7 +120,7 @@ async function renderRoute(route, options = { updateHistory: true, keepScrollY: 
 }
 
 function getRouteFromCurrentUrl() {
-    return getRouteFromHash(window.location.hash) || getRouteName(window.location.href) || "app.html";
+    return getRouteFromHash(window.location.hash) || getRouteName(window.location.href) || "index.html";
 }
 
 function ensureCanonicalHash() {
