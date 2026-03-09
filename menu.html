@@ -1,21 +1,113 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!-- Configuracion basica de caracteres para tildes y enes -->
     <meta charset="UTF-8">
-    <!-- Hace que el diseno se adapte al ancho real del dispositivo -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sebastian Jesahel | Menu</title>
-    <!-- Archivo dedicado de estilos para construir el menu por separado -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Css/styles-menu.css">
 </head>
-<body class="menu-page">
-    <!-- Contenedor principal del menu, centrado en pantalla -->
+<body class="menu-page dark-mode">
     <main class="contenido-menu">
-        <nav class="menu">
-            <!-- Titulo temporal mientras construyes el menu final -->
-            <h2>Menu de trabajo</h2>
-        </nav>
+        <section class="panel-principal">
+            <header class="panel-top">
+                <nav class="menu-links" aria-label="Navegacion principal">
+                    <a href="#inicio">Inicio</a>
+                    <a href="#proyectos">Proyectos</a>
+                    <a href="contacto.html">Contacto</a>
+                </nav>
+
+                <label class="theme-toggle" for="theme-toggle" aria-label="Cambiar tema">
+                    <input id="theme-toggle" type="checkbox">
+                    <span class="track">
+                        <span class="thumb"></span>
+                    </span>
+                </label>
+            </header>
+
+            <div class="panel-content">
+                <article class="perfil" id="inicio">
+                    <h1>Sebastian Sanchez</h1>
+                    <p class="rol">Desarrollador Fullstack</p>
+                    <p class="descripcion">
+                        Bachiller en Ingenieria de Sistemas con experiencia como Full Stack Developer y Data Analyst.
+                        Especializado en sistemas de mision critica, arquitectura .NET y optimizacion de bases SQL y NoSQL.
+                        He participado en proyectos de alta disponibilidad con foco en calidad, seguridad y soluciones
+                        tecnologicas eficientes para usuarios finales y operaciones de negocio.
+                    </p>
+                </article>
+
+                <aside class="habilidades" id="proyectos">
+                    <h2>Habilidades tecnicas</h2>
+
+                    <ul class="skills-list">
+                        <li class="skill-item" data-level="85">
+                            <div class="skill-head">
+                                <span>JavaScript</span>
+                                <span class="skill-value">85%</span>
+                            </div>
+                            <div class="bar">
+                                <span class="bar-fill"></span>
+                            </div>
+                        </li>
+                        <li class="skill-item" data-level="80">
+                            <div class="skill-head">
+                                <span>C#</span>
+                                <span class="skill-value">80%</span>
+                            </div>
+                            <div class="bar">
+                                <span class="bar-fill"></span>
+                            </div>
+                        </li>
+                        <li class="skill-item" data-level="78">
+                            <div class="skill-head">
+                                <span>.NET</span>
+                                <span class="skill-value">78%</span>
+                            </div>
+                            <div class="bar">
+                                <span class="bar-fill"></span>
+                            </div>
+                        </li>
+                        <li class="skill-item" data-level="75">
+                            <div class="skill-head">
+                                <span>SQL</span>
+                                <span class="skill-value">75%</span>
+                            </div>
+                            <div class="bar">
+                                <span class="bar-fill"></span>
+                            </div>
+                        </li>
+                        <li class="skill-item" data-level="70">
+                            <div class="skill-head">
+                                <span>NoSQL</span>
+                                <span class="skill-value">70%</span>
+                            </div>
+                            <div class="bar">
+                                <span class="bar-fill"></span>
+                            </div>
+                        </li>
+                        <li class="skill-item" data-level="72">
+                            <div class="skill-head">
+                                <span>Python</span>
+                                <span class="skill-value">72%</span>
+                            </div>
+                            <div class="bar">
+                                <span class="bar-fill"></span>
+                            </div>
+                        </li>
+                    </ul>
+                </aside>
+            </div>
+
+            <footer class="panel-footer" id="contacto">
+                <a href="mailto:sebastian@email.com">jesahel088@gmail.com</a>
+                <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
+                <a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a>
+            </footer>
+        </section>
     </main>
+
+    <script src="js/theme.js"></script>
+    <script src="js/menu.js"></script>
 </body>
 </html>

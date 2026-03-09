@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sebastian Jesahel | Contacto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="Css/styles-menu.css">
+</head>
+<body class="menu-page dark-mode">
+    <main class="contenido-menu">
+        <section class="panel-principal">
+            <header class="panel-top">
+                <nav class="menu-links" aria-label="Navegacion principal">
+                    <a href="menu.html#inicio">Inicio</a>
+                    <a href="menu.html#proyectos">Proyectos</a>
+                    <a href="contacto.html" class="is-active">Contacto</a>
+                </nav>
+
+                <label class="theme-toggle" for="theme-toggle" aria-label="Cambiar tema">
+                    <input id="theme-toggle" type="checkbox">
+                    <span class="track">
+                        <span class="thumb"></span>
+                    </span>
+                </label>
+            </header>
+
+            <div class="panel-content contact-layout">
+                <article class="perfil">
+                    <h1>Contacto</h1>
+                    <p class="rol">Hablemos de tu proyecto</p>
+                    <p class="descripcion">
+                        Si quieres colaborar, necesitas soporte tecnico o tienes una propuesta laboral,
+                        enviame un mensaje por este formulario y te respondo lo antes posible.
+                    </p>
+                </article>
+
+                <section class="contact-card" aria-labelledby="form-title">
+                    <h2 id="form-title">Formulario</h2>
+                    <form
+                        class="contact-form"
+                        id="contact-form"
+                        action="https://formspree.io/f/meereogq"
+                        method="POST"
+                    >
+                        <input type="hidden" name="_subject" value="Nuevo mensaje desde tu portafolio">
+                        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hp-field" aria-hidden="true">
+
+                        <label for="nombre">Nombre</label>
+                        <input id="nombre" name="nombre" type="text" placeholder="Tu nombre" required>
+
+                        <label for="email">Correo</label>
+                        <input id="email" name="email" type="email" placeholder="tuemail@dominio.com" required>
+
+                        <label for="asunto">Asunto</label>
+                        <input id="asunto" name="asunto" type="text" placeholder="Asunto del mensaje" required>
+
+                        <label for="mensaje">Mensaje</label>
+                        <textarea id="mensaje" name="mensaje" rows="5" placeholder="Escribe tu mensaje..." required></textarea>
+
+                        <button type="submit" class="btn-submit">Enviar mensaje</button>
+                        <p class="form-feedback" id="form-feedback" aria-live="polite"></p>
+                    </form>
+                </section>
+            </div>
+
+            <footer class="panel-footer">
+                <a href="mailto:jesahel088@gmail.com">jesahel088@gmail.com</a>
+                <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
+                <a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a>
+            </footer>
+        </section>
+    </main>
+
+    <script src="js/theme.js"></script>
+    <script src="js/contacto.js"></script>
+</body>
+</html>
